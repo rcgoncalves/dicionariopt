@@ -1,0 +1,116 @@
+body {
+	margin:0;
+	padding: 0;
+}
+
+#front {
+	width: 100%;
+}
+
+#topLeft {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 200px;
+	height: 45px;
+	background: url(../Images/Body/topLeft.png) no-repeat;
+	z-index: -101;
+}
+
+#topMiddle {
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	right: 200px;
+	height: 45px;
+	background: url(../Images/Body/topMiddle.png) repeat-x;
+	z-index: -101;
+}
+
+#topRight {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 200px;
+	height: 45px;
+	background: url(../Images/Body/topRight.png) no-repeat;
+	z-index: -101;
+}
+
+#middleLeft {
+	position: absolute;
+	top: 30px;
+	bottom: 45px;
+	left: 32px;
+	width: 200px;
+	background: url(../Images/Body/middleLeft.png) repeat-y;
+	z-index: -102;
+}
+
+#middleMiddle {
+	position: absolute;
+	top:30px;
+	bottom: 30px;
+	left: 200px;
+	right: 200px;
+	background: url(../Images/Body/middleMiddle.png) repeat;
+	z-index: -102;
+}
+
+#middleRight {
+	position: absolute;
+	top: 30px;
+	bottom: 45px;
+	right: 19px;
+	width: 200px;
+	background: url(../Images/Body/middleRight.png) repeat-y;
+	z-index: -102;
+}
+
+#bottomLeft {
+	position: absolute;
+	bottom: 0px;
+	left: 25px;
+	width: 200px;
+	height: 45px;
+	background: url(../Images/Body/bottomLeft.png) no-repeat;
+	z-index: -102;
+}
+
+#bottomMiddle {
+	position: absolute;
+	bottom: 0px;
+	left: 225px;
+	right: 210px;
+	height: 45px;
+	background: url(../Images/Body/bottomMiddle.png) repeat-x;
+	z-index: -102;
+}
+
+#bottomRight {
+	position: absolute;
+	bottom: 0px;
+	right: 10px;
+	width: 200px;
+	height: 45px;
+	background: url(../Images/Body/bottomRight.png) no-repeat;
+	z-index: -102;
+}
+
+#resize {
+	position: absolute;
+	bottom: 28px;
+	right: 30px;
+	z-index: 10;
+	-apple-dashboard-region: dashboard-region(control rectangle);
+}
+
+#info {
+	color: #fff;
+	font: 9pt 'Lucida Grande';
+	position: absolute;
+	bottom: 27px;
+	left: 37px;
+	z-index: 10;
+	-apple-dashboard-region: dashboard-region(control rectangle);
+}

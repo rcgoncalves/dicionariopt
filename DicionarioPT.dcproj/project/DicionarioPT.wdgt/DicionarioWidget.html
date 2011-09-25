@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="AppleClasses/AppleAnimator.js" charset="utf-8"></script>
+    <script type="text/javascript" src="AppleClasses/AppleScrollbar.js" charset="utf-8"></script>
+    <script type="text/javascript" src="AppleClasses/AppleScrollArea.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Scripts/Widget.js"></script>
+    <script type="text/javascript" src="Scripts/URL.js"></script>
+    <script type="text/javascript" src="Scripts/Dicionario.js"></script>
+    <script type="text/javascript" src="Scripts/Parser.js"></script>
+    <script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleAnimator.js" charset="utf-8"></script>
+    <script type="text/javascript" src="file:///System/Library/WidgetResources/AppleClasses/AppleInfoButton.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="Styles/style.css">
+    <link rel="stylesheet" type="text/css" href="Styles/resize.css">
+</head>
+<body onload="LoadWidget();">
+    <div id="front">
+        <div id="Name">Dicionário</div>
+        <img id="progressGraphic" src="Images/Progress/prog1.png">
+        <input id="SearchField" type="search" placeholder="Procurar palavra" size="16" results="" incremental="" onsearch="Search(this.value);">
+        <div id="topLeft"></div>
+        <div id="topMiddle"></div>
+        <div id="topRight"></div>
+        <div id="bottomBar">
+            <div id="middleLeft"></div>
+            <div id="middleMiddle"></div>
+            <div id="middleRight"></div>
+            <div id="scrollArea">
+                <div id="contents"></div>
+            </div>
+            <div id="scrollBar"></div>
+            <div id="bottomLeft">
+            </div>
+            <div id="bottomMiddle"></div>
+            <div id="bottomRight"></div>
+            <img id="resize" src="Images/resizer.png" onmousedown="Widget.resizeMouseDown(event);" apple-default-image-visibility="hidden">
+            <div id="info" onclick="openWebsite(event)" apple-default-image-visibility="hidden">DicionarioPT r4.0.0</div>
+        </div>
+    </div>
+</body>
+</html>

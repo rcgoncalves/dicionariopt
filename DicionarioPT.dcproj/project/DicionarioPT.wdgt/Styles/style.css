@@ -1,0 +1,67 @@
+#SearchField {
+	font-size: 12pt;
+	position:absolute;
+	top:8px;
+	right:12px;
+	width: 150px;
+	z-index: 15;
+}
+
+#Name {
+	position:absolute;
+	font-family: "Lucida Grande";
+	font-size: 17pt;
+	color: white;
+	top:8px;
+	left:25px;
+	z-index: 15;
+}
+
+#progressGraphic {
+	display:block;
+	position:absolute;
+	top:12px;
+	right: 170px;
+	height: 22px;
+	width: 22px;
+	z-index: 15;
+}
+
+#contents {
+	font-family: "Helvetica Neue";
+	font-size: 10pt;
+	color: black;
+	overflow: hidden;
+	z-index: 50;
+	-apple-dashboard-region:dashboard-region(control rectangle);
+	-khtml-user-select:text;
+}
+
+#scrollArea {
+	position: absolute;
+	top: 45px;    
+	bottom: 50px;
+	left: 40px;
+	right: 50px;
+	z-index: 49;
+}
+
+#scrollBar {
+	position: absolute;
+    top: 45px;
+	bottom: 50px;
+	right: 30px;
+	width: 19px;
+	z-index: 40;
+}
+
+
+.dAO, .varpb {
+    display: none;
+}
+
+.tdHEAD, .thCONJ {
+    font-weight: bold;
+    background-color: #a06d90;
+    text-align: center;
+}
