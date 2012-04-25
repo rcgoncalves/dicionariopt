@@ -190,20 +190,40 @@ function parseDefinitionStructure(html) {
       case "A" :
         var url=elem.getAttribute("href");
         if(url!=null) {
-          url=url.replace(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig,"javascript:Conjugation('$2')");
-          url=url.replace(/(.|\n)*default.aspx\?pal=([^\"]+)/ig,"javascript:Search('$2')");
-          elem.setAttribute("href", url);
-          elem.innerHTML=elem.innerHTML.replace(/^\s*/,"");
-          elem.innerHTML=elem.innerHTML.replace(/\s*$/,"");
+          if((!url.match(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig))
+              && (!url.match(/(.|\n)*default.aspx\?pal=([^\"]+)/ig))
+              && (!url.match(/dicionario@priberam.pt/))) {
+            elem.removeAttribute("href");
+          }
+          else {
+            url=url.replace(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig,"javascript:Conjugation('$2')");
+            url=url.replace(/(.|\n)*default.aspx\?pal=([^\"]+)/ig,"javascript:Search('$2')");
+            elem.setAttribute("href", url);
+            elem.innerHTML=elem.innerHTML.replace(/^\s*/,"");
+            elem.innerHTML=elem.innerHTML.replace(/\s*$/,"");
+          }
         }
         break;
+      case "SCRIPT" :
+        toDel = 1;
+        break;
       case "DIV" :
-        var style=elem.getAttribute("style");
-        if(style != null) {
-          if(style.match(/background-color:\s*#f1f1f1;/ig)) toDel = 1;
-          else {
-            style=style.replace(/background-color:\s*#eee;/,"");
-            elem.setAttribute("style", style);
+        var divId=elem.getAttribute('id');
+        if(divId=='ctl00_ContentPlaceHolder1_pnl_ultimas_pesquisas'
+            || divId=='ctl00_ContentPlaceHolder1_pnl_nuvem_palavras'
+            || divId=='ctl00_ContentPlaceHolder1_pnl_VerVideo'
+            || divId=='ctl00_ContentPlaceHolder1_pnl_Traduzir'
+            || divId=='ctl00_ContentPlaceHolder1_pnl_relacionadas') {
+          toDel = 1;
+        }
+        else {
+          var style=elem.getAttribute("style");
+          if(style != null) {
+            if(style.match(/background-color:\s*#f1f1f1;/ig)) toDel = 1;
+            else {
+              style=style.replace(/background-color:\s*#eee;/,"");
+              elem.setAttribute("style", style);
+            }
           }
         }
         break;
@@ -225,6 +245,7 @@ function parseDefinitionStructure(html) {
       html.removeChild(elem);
       if(i > 1 && html.children[i-2].tagName == "BR") {
         html.removeChild(html.children[i-2]);
+        i--;
       }
     }
     else if(toDel == 2 && i > 1 && html.children[i-2].tagName == "BR") {

@@ -10,8 +10,10 @@
 	<string>pt.jaac.dicionario</string>
 	<key>CFBundleName</key>
 	<string>Dicionario</string>
+	<key>CFBundleShortVersionString</key>
+	<string>r4.0.1</string>
 	<key>CFBundleVersion</key>
-	<string>r4.0.0</string>
+	<string>r4.0.1</string>
 	<key>CloseBoxInsetX</key>
 	<integer>13</integer>
 	<key>CloseBoxInsetY</key>
