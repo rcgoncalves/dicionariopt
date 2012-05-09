@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009, Rui Carlos Gonçalves (rcgoncalves.pt@gmail.com)
+ * Copyright (C) 2012, Rui Carlos Gonçalves (rcgoncalves.pt@gmail.com)
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
@@ -20,9 +20,10 @@ function getDefinition(html)
   if(html==null) return null;
   else if(html.innerHTML.match("FormataSugestoesENaoEncontrados")) return null;
   else {
-    parseDefinitionStructure(html);
+    html = getDefinitionStructure(html);
+    html = parseDefinitionStructure(html);
     definition = html.innerHTML;
-    definition=stripTags(definition,true,"font","img","Definicao","/Definicao");
+    definition = stripTags(definition,true,"font","img","Definicao","/Definicao");
     return definition;
   }
 }
@@ -30,8 +31,7 @@ function getDefinition(html)
 /**
  * Get suggestions
  */
-function getSuggestions(htmlDef)
-{
+function getSuggestions(htmlDef) {
   var result = "";
   for(i = 0; i < htmlDef.children.length; i++) {
     var div = htmlDef.children[i];
@@ -52,8 +52,8 @@ function getSuggestions(htmlDef)
         }
       }
       else {
-	    var wordlinked=html.stripTags(div.innerHTML, true, "font", "/font");
-	    var word=stripTags(wordlinked, true, "a", "/a");
+	    var wordlinked = html.stripTags(div.innerHTML, true, "font", "/font");
+	    var word = stripTags(wordlinked, true, "a", "/a");
         result += "<li>";
         result += wordlinked.replace(/<a[^>]*>/,"<a href=\"javascript:Search('"+word+"')\">");
         result += "</a>";
@@ -71,14 +71,13 @@ function getSuggestions(htmlDef)
 /**
  * Get verb conjugation
  */
-function getConjugation(html)
-{
-  var str=getFirstElementByTagName(html,"body");
-  str=getFirstElementByTagName(str,"body",10);
+function getConjugation(html) {
+  var str = getFirstElementByTagName(html,"body");
+  str = getFirstElementByTagName(str,"body",10);
   
-  str=stripTags(str, true, "body", "font", "/body");
-  str=str.replace(/background-color:\s*#eee;/g,"");
-  str=str.replace(/(<br>)*$/g,"");
+  str = stripTags(str, true, "body", "font", "/body");
+  str = str.replace(/background-color:\s*#eee;/g,"");
+  str = str.replace(/(<br>)*$/g,"");
   
   return str;
 }
@@ -89,70 +88,65 @@ function getConjugation(html)
  */
 function getFirstElementByTagName(str, tag, start)
 {
-  var strx=str;
-  if(start) strx=strx.substr(start);
-  strx=removeComments(strx);
-  var res="";
-  var open=new RegExp("<"+tag+"[^>]*>","i");
-  var close=new RegExp("</"+tag+" *>","i");
-  var pos1=strx.search(open);
+  var strx = str;
+  if(start) strx = strx.substr(start);
+  strx = removeComments(strx);
+  var res = "";
+  var open = new RegExp("<"+tag+"[^>]*>","i");
+  var close = new RegExp("</"+tag+" *>","i");
+  var pos1 = strx.search(open);
   var pos2;
-  var pos=pos1;
+  var pos = pos1;
   var count;
   
-  if(pos<0) return "";
-  else
-  {
-    strx=strx.substr(pos);
-    res=strx.substr(0,1);
-    strx=strx.substr(1);
-    count=1;
-    var error=false;
+  if(pos < 0) return "";
+  else {
+    strx = strx.substr(pos);
+    res = strx.substr(0,1);
+    strx = strx.substr(1);
+    count = 1;
+    var error = false;
     
-    while(count>0 && !error)
+    while(count > 0 && !error)
     {
-      pos1=strx.search(open);
-      pos2=strx.search(close);
-      if(pos2<0) error=true;
+      pos1 = strx.search(open);
+      pos2 = strx.search(close);
+      if(pos2 < 0) error = true;
       
-      if(pos1<pos2 && pos1>=0) //open tag
+      if(pos1 < pos2 && pos1 >= 0) //open tag
       {
         count++;
-        pos=pos1;
+        pos = pos1;
       }
-      else if(pos2>=0) //close tag
+      else if(pos2 >= 0) //close tag
       {
         count--;
-        pos=pos2;
+        pos = pos2;
       }
       
-      res+=strx.substr(0,pos+1);
-      strx=strx.substr(pos+1);
+      res += strx.substr(0,pos + 1);
+      strx = strx.substr(pos + 1);
     }
     
     if(error) return "";
-    else return res+"/"+tag+">";
+    else return res + "/" + tag + ">";
   }
 }
 
 /**
  * Remove XML comments from the string 'str'.
  */
-function removeComments(str)
-{
-  var start=str.indexOf("<!--");
+function removeComments(str) {
+  var start = str.indexOf("<!--");
   var end;
-  while(start>=0)
-  {
-    end=str.indexOf("-->");
-    if(end<=start) start=-1;
-    else
-    {
-      str=str.substr(0,start)+str.substr(end+3);
-      start=str.indexOf("<!--");
+  while(start >= 0) {
+    end = str.indexOf("-->");
+    if(end <= start) start = -1;
+    else {
+      str = str.substr(0, start) + str.substr(end+3);
+      start = str.indexOf("<!--");
     }
   }
-  
   return str;
 }
 
@@ -178,8 +172,35 @@ function removeAttributes(element) {
 }
 
 /**
+ * Finds the block that contains the definition.
+ */
+function getDefinitionStructure(html) {
+  var i = html.children.length - 1;
+  if(i < 0) {
+    var str = html.innerHTML.match(/<def>.*<\/def>/);
+    if(str != null) {
+      return html;
+    }
+    else return null;
+  }
+  else {
+    for( ; i >= 0; i--) {
+      var elem = html.children[i];
+      if(elem.tagName == 'DEF') {
+        return elem;
+      }
+      else {
+        rec = getDefinitionStructure(elem);
+        if(rec) return rec;
+      }
+    }
+    return null;
+  }
+}
+
+/**
  * Parse definition.
- * Adjust URL, remove some attributes, remove some tags, etc.
+ * Adjust URLs, remove some attributes, remove some tags, etc.
  */
 function parseDefinitionStructure(html) {
   var i = html.children.length;
@@ -204,6 +225,7 @@ function parseDefinitionStructure(html) {
           }
         }
         break;
+      case "REFS_EXTERNAS" :
       case "SCRIPT" :
         toDel = 1;
         break;
@@ -264,4 +286,5 @@ function parseDefinitionStructure(html) {
       parseDefinitionStructure(elem);
     }
   }
+  return html;
 }

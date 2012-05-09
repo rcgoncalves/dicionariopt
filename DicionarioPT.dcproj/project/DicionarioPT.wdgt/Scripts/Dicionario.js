@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006, José Coelho (jose.alberto.coelho@gmail.com)
- * Copyright (C) 2009, Rui Carlos Gonçalves (rcgoncalves.pt@gmail.com)
+ * Copyright (C) 2012, Rui Carlos Gonçalves (rcgoncalves.pt@gmail.com)
  * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
  * General Public License as published by the Free Software Foundation; either version 2 of the License,
  * or (at your option) any later version.
@@ -23,27 +23,31 @@ function LoadWidget() {
 	Widget.setSize();
 	Widget.progressLoad("progressGraphic");
 	scrollBar = new AppleVerticalScrollbar( document.getElementById('scrollBar') );
-	scrollArea = new AppleScrollArea( document.getElementById('scrollArea') );
+	scrollArea = new AppleScrollArea( document.getElementById('scrollArea'), scrollBar );
 	scrollArea.addScrollbar( scrollBar );
 	scrollBar.show();
 	Widget.shrink();
-	
 }
 
-function Search(value)
-{
+function shrinkExpand(event) {
+    if(Widget.close) {
+        Widget.expand();
+    }
+    else {
+        Widget.shrink();
+    }
+}
+
+function Search(value) {
 	/* needed because may exist links on contents */
 	document.getElementById("SearchField").value = value;
-	
-	if( value.length == 0 )
-	{
+	if( value.length == 0 ) {
 		/* nothing on search input, close widget */
 		Widget.shrink();
 		document.getElementById("contents").innerHTML = "";
 		
 	}
-	else
-	{
+	else {
 		/* visual output */
 		Widget.progressStart();
 		Web.location = "http://www.priberam.pt/dlpo/default.aspx?pal="+value;
@@ -51,45 +55,38 @@ function Search(value)
 	}
 }
 
-function GetResult(webfetch)
-{
+function GetResult(webfetch) {
     document.getElementById("contents").innerHTML = webfetch.result;
-    var htmlDef=document.getElementById("DivDefinicao");
+    var htmlDef = document.getElementById("DivDefinicao");
     document.getElementById("contents").innerHTML = "";
-    var def=getDefinition(htmlDef);
-	if(def)
-	{
+    var def = getDefinition(htmlDef);
+	if(def) {
 		document.getElementById("contents").innerHTML = def;
 	}
-	else
-	{
+	else {
 		document.getElementById("contents").innerHTML = getSuggestions(htmlDef);
 	}
 	
-	if( Widget.needResize() )
-	{
+	if(Widget.needResize()) {
 		Widget.expand();
 	}
-	
-	/* all done, stop progress and refresh scrollbar in order to match the contents */
 	Widget.progressStop();
 	scrollArea.refresh();
+    scrollBar.refresh();
+    scrollArea.verticalScrollTo(0);
 }
 
-function Conjugation(value)
-{
+function Conjugation(value) {
 	/* needed because may exist links on contents */
 	document.getElementById("SearchField").value = value;
 	
-	if( value.length == 0 )
-	{
+	if( value.length == 0 ) {
 		/* nothing on search input, close widget */
 		Widget.shrink();
 		document.getElementById("contents").innerHTML = "";
 		
 	}
-	else
-	{
+	else {
 		/* visual output */
 		Widget.progressStart();
 		Web.location = "http://www.priberam.pt/dlpo/Conjugar.aspx?pal="+value;
@@ -101,18 +98,17 @@ function GetConjugation(webfetch)
 {
   document.getElementById("contents").innerHTML = getConjugation(webfetch.result);
   	
-  if( Widget.needResize() )
-  {
+  if( Widget.needResize() ) {
 	Widget.expand();
   }
-	
-  /* all done, stop progress and refresh scrollbar in order to match the contents */
   Widget.progressStop();
   scrollArea.refresh();
+  scrollBar.refresh();
+  scrollArea.verticalScrollTo(0);
 }
 
 function openWebsite()  {
-    widget.openURL('http://rcgoncalves.net/project/dicionariopt/');
+    widget.openURL('http://rcgoncalves.pt/project/dicionariopt/');
 }
 
 /*
