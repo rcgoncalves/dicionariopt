@@ -84,7 +84,6 @@ function Conjugation(value) {
 		/* nothing on search input, close widget */
 		Widget.shrink();
 		document.getElementById("contents").innerHTML = "";
-		
 	}
 	else {
 		/* visual output */

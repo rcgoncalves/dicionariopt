@@ -12,12 +12,16 @@
  * write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+// ======================================================================================================
+// WORD DEFINITION ======================================================================================
+// ======================================================================================================
+
 /**
  * Get word definition
  */
 function getDefinition(html)
 {
-  if(html==null) return null;
+  if(html == null) return null;
   else if(html.innerHTML.match("FormataSugestoesENaoEncontrados")) return null;
   else {
     html = getDefinitionStructure(html);
@@ -29,173 +33,21 @@ function getDefinition(html)
 }
 
 /**
- * Get suggestions
- */
-function getSuggestions(htmlDef) {
-  var result = "";
-  for(i = 0; i < htmlDef.children.length; i++) {
-    var div = htmlDef.children[i];
-    var id = div.getAttribute("id");
-    if(div.tagName == "DIV" && id != null && id == "FormataSugestoesENaoEncontrados") {
-      if(div.children[0].tagName == "FONT") {
-        if(div.children[0].children[0] != null && div.children[0].children[0].tagName == "A") {
-          var word = div.children[0].children[0].innerHTML;
-          word = word.replace(/^\s/,"");
-          word = word.replace(/\s$/,"");
-          result += "<li><a href=\"javascript:Search('" + word + "')\">" + word + "</a></li>\n";
-        }
-        else {
-          var word = div.children[0].innerHTML;
-          word = word.replace(/^\s/,"");
-          word = word.replace(/\s$/,"");
-          result += "<li>" + word + "</li>\n";
-        }
-      }
-      else {
-	    var wordlinked = html.stripTags(div.innerHTML, true, "font", "/font");
-	    var word = stripTags(wordlinked, true, "a", "/a");
-        result += "<li>";
-        result += wordlinked.replace(/<a[^>]*>/,"<a href=\"javascript:Search('"+word+"')\">");
-        result += "</a>";
-        result += "</li>\n";
-      }
-    }
-  }
-  if(result != "") {
-    result = "Existem as seguintes sugest&otilde;es:\n" + "<ul style=\"margin: 3px; padding-left: 18px; text-indent: -3px;\">\n" + result + "</ul>\n";
-    return result;
-  }
-  else return "N&atilde;o existem sugest&otilde;es.";
-}
-
-/**
- * Get verb conjugation
- */
-function getConjugation(html) {
-  var str = getFirstElementByTagName(html,"body");
-  str = getFirstElementByTagName(str,"body",10);
-  
-  str = stripTags(str, true, "body", "font", "/body");
-  str = str.replace(/background-color:\s*#eee;/g,"");
-  str = str.replace(/(<br>)*$/g,"");
-  
-  return str;
-}
-
-/**
- * Returns the first element from XML formatted string 'str', with tag name 'tag'.
- * It starts searching from 'start'.
- */
-function getFirstElementByTagName(str, tag, start)
-{
-  var strx = str;
-  if(start) strx = strx.substr(start);
-  strx = removeComments(strx);
-  var res = "";
-  var open = new RegExp("<"+tag+"[^>]*>","i");
-  var close = new RegExp("</"+tag+" *>","i");
-  var pos1 = strx.search(open);
-  var pos2;
-  var pos = pos1;
-  var count;
-  
-  if(pos < 0) return "";
-  else {
-    strx = strx.substr(pos);
-    res = strx.substr(0,1);
-    strx = strx.substr(1);
-    count = 1;
-    var error = false;
-    
-    while(count > 0 && !error)
-    {
-      pos1 = strx.search(open);
-      pos2 = strx.search(close);
-      if(pos2 < 0) error = true;
-      
-      if(pos1 < pos2 && pos1 >= 0) //open tag
-      {
-        count++;
-        pos = pos1;
-      }
-      else if(pos2 >= 0) //close tag
-      {
-        count--;
-        pos = pos2;
-      }
-      
-      res += strx.substr(0,pos + 1);
-      strx = strx.substr(pos + 1);
-    }
-    
-    if(error) return "";
-    else return res + "/" + tag + ">";
-  }
-}
-
-/**
- * Remove XML comments from the string 'str'.
- */
-function removeComments(str) {
-  var start = str.indexOf("<!--");
-  var end;
-  while(start >= 0) {
-    end = str.indexOf("-->");
-    if(end <= start) start = -1;
-    else {
-      str = str.substr(0, start) + str.substr(end+3);
-      start = str.indexOf("<!--");
-    }
-  }
-  return str;
-}
-
-function removeSpaces(str)
-{
-  var res=str.replace(/\s+/g,"");
-  return res;
-}
-
-function removeTags(str)
-{
-  var res=str.replace(/<[^>]*>/g,"");
-  return res;
-}
-
-/**
- * Remove the attributes of a HTMElement.
- */
-function removeAttributes(element) {
-  while(element.attributes.length > 0) {
-    element.removeAttribute(element.attributes[0].name);
-  }
-}
-
-/**
  * Finds the block that contains the definition.
  */
 function getDefinitionStructure(html) {
   var i = html.children.length - 1;
-  if(i < 0) {
-    var str = html.innerHTML.match(/<def>.*<\/def>/);
-    if(str != null) {
-      return html;
+  for( ; i >= 0; i--) {
+    var elem = html.children[i];
+    if(elem.tagName == 'DEF') {
+      return elem;
     }
-    else return null;
-  }
-  else {
-    for( ; i >= 0; i--) {
-      var elem = html.children[i];
-      if(elem.tagName == 'DEF') {
-        return elem;
-      }
-      else {
-        rec = getDefinitionStructure(elem);
-        if(rec) return rec;
-      }
+    else {
+      rec = getDefinitionStructure(elem);
+      if(rec) return rec;
     }
-    return null;
   }
+  return null;
 }
 
 /**
@@ -211,14 +63,14 @@ function parseDefinitionStructure(html) {
       case "A" :
         var url=elem.getAttribute("href");
         if(url!=null) {
-          if((!url.match(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig))
-              && (!url.match(/(.|\n)*default.aspx\?pal=([^\"]+)/ig))
+          if((!url.match(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig)) //"
+              && (!url.match(/(.|\n)*default.aspx\?pal=([^\"]+)/ig)) //"
               && (!url.match(/dicionario@priberam.pt/))) {
             elem.removeAttribute("href");
           }
           else {
-            url=url.replace(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig,"javascript:Conjugation('$2')");
-            url=url.replace(/(.|\n)*default.aspx\?pal=([^\"]+)/ig,"javascript:Search('$2')");
+            url=url.replace(/(.|\n)*Conjugar.aspx\?pal=([^\"]+)/ig,"javascript:Conjugation('$2')"); //"
+            url=url.replace(/(.|\n)*default.aspx\?pal=([^\"]+)/ig,"javascript:Search('$2')"); //"
             elem.setAttribute("href", url);
             elem.innerHTML=elem.innerHTML.replace(/^\s*/,"");
             elem.innerHTML=elem.innerHTML.replace(/\s*$/,"");
@@ -287,4 +139,143 @@ function parseDefinitionStructure(html) {
     }
   }
   return html;
+}
+
+// ======================================================================================================
+// SUGGESTIONS ==========================================================================================
+// ======================================================================================================
+
+/**
+ * Get suggestions
+ */
+function getSuggestions(htmlDef) {
+  var result = "";
+  var list = getSuggestionsList(htmlDef);
+  for(i in list) {
+    result += "<li><a href=\"javascript:Search('" + list[i] + "')\">" + list[i] + "</a></li>\n";
+  }
+  if(result != "") {
+    result = "Existem as seguintes sugest&otilde;es:\n" + "<ul style=\"margin: 3px; padding-left: 18px; text-indent: -3px; list-style-type: square;\">\n" + result + "</ul>\n";
+    return result;
+  }
+  else return "N&atilde;o existem sugest&otilde;es.";
+}
+
+/**
+ * Get list of suggestions.
+ */
+function getSuggestionsList(htmlDef) {
+  var result = new Array();
+  for(i = 0; i < htmlDef.children.length; i++) {
+    var elem = htmlDef.children[i];
+    var id = elem.getAttribute("id");
+    if(elem.tagName == "DIV" && id != null && id == "FormataSugestoesENaoEncontrados") {
+      result.push(elem.innerText);
+    }
+    else if(elem.innerHTML.match(/FormataSugestoesENaoEncontrados/)) {
+      result = result.concat(getSuggestionsList(elem));
+    }
+  }
+  return result;
+}
+
+// ======================================================================================================
+// CONJUGATION ==========================================================================================
+// ======================================================================================================
+
+/**
+ * Get verb conjugation
+ */
+function getConjugation(html) {
+  var str = getFirstElementByTagName(html,"body");
+  str = getFirstElementByTagName(str,"body",10);
+  
+  str = stripTags(str, true, "body", "font", "/body");
+  str = str.replace(/background-color:\s*#eee;/g,"");
+  str = str.replace(/(<br>)*$/g,"");
+  
+  return str;
+}
+
+// ======================================================================================================
+// AUXILIAR FUNCTIONS ===================================================================================
+// ======================================================================================================
+
+/**
+ * Returns the first element from XML formatted string 'str', with tag name 'tag'.
+ * It starts searching from 'start'.
+ */
+function getFirstElementByTagName(str, tag, start) {
+  var strx = str;
+  if(start) strx = strx.substr(start);
+  strx = removeComments(strx);
+  var res = "";
+  var open = new RegExp("<"+tag+"[^>]*>","i");
+  var close = new RegExp("</"+tag+" *>","i");
+  var pos1 = strx.search(open);
+  var pos2;
+  var pos = pos1;
+  var count;
+  
+  if(pos < 0) return "";
+  else {
+    strx = strx.substr(pos);
+    res = strx.substr(0,1);
+    strx = strx.substr(1);
+    count = 1;
+    var error = false;
+    
+    while(count > 0 && !error) {
+      pos1 = strx.search(open);
+      pos2 = strx.search(close);
+      if(pos2 < 0) error = true;
+      
+      if(pos1 < pos2 && pos1 >= 0) { //open tag
+        count++;
+        pos = pos1;
+      }
+      else if(pos2 >= 0) { //close tag
+        count--;
+        pos = pos2;
+      }
+      
+      res += strx.substr(0,pos + 1);
+      strx = strx.substr(pos + 1);
+    }
+    
+    if(error) return "";
+    else return res + "/" + tag + ">";
+  }
+}
+
+/**
+ * Remove XML comments from string 'str'.
+ */
+function removeComments(str) {
+  return str.replace(/<!--[\s\S]*?-->/g);
+}
+
+/**
+ * Remove consecutive spaces from string 'str'.
+ */
+function removeSpaces(str) {
+  var res=str.replace(/\s+/g,"");
+  return res;
+}
+
+/**
+ * Removes all tags from string 'str'.
+ */
+function removeTags(str) {
+  var res=str.replace(/<[^>]*>/g,"");
+  return res;
+}
+
+/**
+ * Remove the attributes of a HTMLElement.
+ */
+function removeAttributes(element) {
+  while(element.attributes.length > 0) {
+    element.removeAttribute(element.attributes[0].name);
+  }
 }
