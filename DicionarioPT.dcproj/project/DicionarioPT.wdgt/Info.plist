@@ -7,13 +7,13 @@
 	<key>CFBundleDisplayName</key>
 	<string>DicionarioPT</string>
 	<key>CFBundleIdentifier</key>
-	<string>pt.jaac.dicionario</string>
+	<string>pt.rcgoncalves.dicionariopt</string>
 	<key>CFBundleName</key>
 	<string>Dicionario</string>
 	<key>CFBundleShortVersionString</key>
-	<string>r4.0.2</string>
+	<string>r5.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>r4.0.2</string>
+	<string>r5.0.0</string>
 	<key>CloseBoxInsetX</key>
 	<integer>13</integer>
 	<key>CloseBoxInsetY</key>

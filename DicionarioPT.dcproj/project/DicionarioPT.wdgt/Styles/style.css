@@ -47,21 +47,63 @@
 }
 
 #scrollBar {
-	position: absolute;
-    top: 45px;
-	bottom: 50px;
-	right: 30px;
-	width: 19px;
-	z-index: 40;
+  position: absolute;
+  top: 45px;
+  bottom: 50px;
+  right: 30px;
+  width: 19px;
+  z-index: 40;
 }
 
 
-.dAO, .varpb {
-    display: none;
+p {
+  margin: 0;
+  padding: 4px 0;
 }
 
-.tdHEAD, .thCONJ {
-    font-weight: bold;
-    background-color: #a06d90;
-    text-align: center;
+.dpt-categoria {
+  color: #333;
+  font-size: 1.03em;
+  line-height:1.4;
+  vertical-align:bottom;
+}
+
+.ConjugaNumeroPessoa {
+  color: #333;
+  display: inline-block;
+  padding-right: 5px;
+  text-align: right;
+  min-width: 40px;
+}
+
+.ConjugaImperativoNumeroPessoa {
+  color: #333;
+  float: right;
+  padding-left: 5px;
+  text-align: left;
+  min-width: 40px;
+}
+
+.wrapCONJ {
+  display: table;
+  float: left;
+  margin: 0 8px 8px 0;
+}
+
+.tdHEAD {
+  background-color: #906081;
+  display: table;
+  font-weight: bold;
+  margin-top: 8px;
+  padding: 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.thCONJ {
+  background-color: #a06d90;
+  font-weight: bold;
+  margin-top: 3px;
+  padding: 2px;
+  text-align: center;
 }
