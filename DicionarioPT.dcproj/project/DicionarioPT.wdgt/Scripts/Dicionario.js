@@ -88,7 +88,7 @@ function Conjugation(value) {
   }
   else {
     Widget.progressStart();
-    Web.location = 'http://www.priberam.pt/dlpo/Conjuga/' + value;
+    Web.location = 'http://www.priberam.pt/dlpo/Conjugar/' + value;
     Web.fetchAsync( GetConjugation );
   }
 }

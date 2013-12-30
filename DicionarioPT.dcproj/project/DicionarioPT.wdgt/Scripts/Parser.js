@@ -83,7 +83,7 @@ function parseDefinitionStructure(html) {
             elem.removeAttribute('href');
           }
           else {
-            url=url.replace(/(.|\n)*\/dlpo\/Conjuga\/(.+)/ig, "javascript:Conjugation('$2')");
+            url=url.replace(/(.|\n)*\/dlpo\/Conjugar\/(.+)/ig, "javascript:Conjugation('$2')");
 	    url=url.replace(/(.|\n)*\/dlpo\/(.+)/ig, "javascript:Search('$2')");
             elem.setAttribute('href', url);
           }
@@ -103,6 +103,7 @@ function parseDefinitionStructure(html) {
         break;
       case 'SPAN' :
         if(elem.className == 'varpb') toDel = 1;
+	if(elem.className == 'dAO') toDel = 1;
         break;
       case 'BR' :
         toDel = 2;
